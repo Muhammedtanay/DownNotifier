@@ -1,0 +1,52 @@
+﻿@* @model DownNotifier.ViewModels.TargetApplicationViewModel
+
+<h2>Yeni Uygulama Ekle</h2>
+
+<form asp-action="Create" method="post">
+    <input asp-for="Name" class="form-control" placeholder="Ad" />
+    <input asp-for="Url" class="form-control" placeholder="https://..." />
+    <input asp-for="CheckIntervalInMinutes" class="form-control" placeholder="Kontrol Aralığı (dk)" />
+    <button type="submit" class="btn btn-success">Kaydet</button>
+</form>
+ *@
+
+ @model DownNotifier.ViewModels.TargetApplicationViewModel
+
+<div class="container mt-5">
+    <h2 class="mb-4">Yeni Uygulama Ekle</h2>
+    <form asp-action="Create" method="post" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Ad</label>
+            <input asp-for="Name" class="form-control" placeholder="Uygulama adı" required />
+            <div class="invalid-feedback">Lütfen bir ad giriniz.</div>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Url" class="form-label">URL</label>
+            <input asp-for="Url" class="form-control" placeholder="https://..." required />
+            <div class="invalid-feedback">Lütfen geçerli bir URL giriniz.</div>
+        </div>
+        <div class="mb-3">
+            <label asp-for="CheckIntervalInMinutes" class="form-label">Kontrol Aralığı (dk)</label>
+            <input asp-for="CheckIntervalInMinutes" class="form-control" placeholder="Örn: 5" type="number" required />
+            <div class="invalid-feedback">Lütfen bir kontrol aralığı giriniz.</div>
+        </div>
+        <button type="submit" class="btn btn-success">Kaydet</button>
+    </form>
+</div>
+
+<script>
+    (function () {
+        'use strict';
+        var forms = document.querySelectorAll('.needs-validation');
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+    })();
+</script>

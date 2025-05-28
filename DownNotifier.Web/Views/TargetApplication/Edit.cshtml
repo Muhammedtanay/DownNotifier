@@ -1,0 +1,30 @@
+﻿@model DownNotifier.ViewModels.TargetApplicationViewModel
+
+<div class="container mt-5">
+    <h2 class="mb-4">Uygulama Düzenle</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Ad</label>
+            <input asp-for="Name" class="form-control" placeholder="Uygulama adı girin" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Url" class="form-label">URL</label>
+            <input asp-for="Url" class="form-control" placeholder="https://..." />
+            <span asp-validation-for="Url" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="CheckIntervalInMinutes" class="form-label">Kontrol Aralığı (dk)</label>
+            <input asp-for="CheckIntervalInMinutes" class="form-control" placeholder="Örn: 5" />
+            <span asp-validation-for="CheckIntervalInMinutes" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Güncelle</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
+    </form>
+</div>

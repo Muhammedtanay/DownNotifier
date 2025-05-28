@@ -1,0 +1,18 @@
+﻿@model DownNotifier.ViewModels.TargetApplicationViewModel
+
+<h2>Sil</h2>
+
+<p>Silmek istediğinize emin misiniz?</p>
+<dl>
+    <dt>Ad:</dt>
+    <dd>@Model.Name</dd>
+    <dt>URL:</dt>
+    <dd>@Model.Url</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Evet, Sil</button>
+    <a asp-action="Index" class="btn btn-secondary">Vazgeç</a>
+</form>

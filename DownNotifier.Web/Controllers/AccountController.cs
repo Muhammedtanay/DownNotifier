@@ -57,11 +57,10 @@ namespace DownNotifier.Web.Controllers
             ModelState.AddModelError("", "Geçersiz giriş bilgileri");
             return View(model);
         }
-
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Login");
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult AccessDenied() => View();

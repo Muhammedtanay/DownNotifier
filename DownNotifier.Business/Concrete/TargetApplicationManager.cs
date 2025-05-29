@@ -12,7 +12,8 @@ public class TargetApplicationManager(
         ILogger<TargetApplicationManager> _logger,
         UserManager<AppUser> _userManager,
         HttpClient _httpClient,
-        IMapper _mapper) : ITargetApplicationService
+        IMapper _mapper,
+        IRecurringJobManager _recurringJobManager) : ITargetApplicationService
 {
     public async Task<IEnumerable<TargetApplicationViewModel>> GetAllAsync(string UserId)
     {
@@ -41,11 +42,16 @@ public class TargetApplicationManager(
         {
             targetApplicationData.UserId = UserId;
             await _repository.AddAsync(targetApplicationData);
-
-            RecurringJob.AddOrUpdate(
+           
+            _recurringJobManager.AddOrUpdate(
                 $"check-app-{targetApplicationData.Id}",
                 () => CheckTargetsAsync(targetApplicationData.Id),
                 Cron.MinuteInterval(targetApplicationViewModel.CheckIntervalInMinutes));
+
+            //RecurringJob.AddOrUpdate(
+            //    $"check-app-{targetApplicationData.Id}",
+            //    () => CheckTargetsAsync(targetApplicationData.Id),
+            //    Cron.MinuteInterval(targetApplicationViewModel.CheckIntervalInMinutes));
 
             _logger.LogInformation("Yeni görev eklendi: {@TargetApplicationData}", targetApplicationData);
         }
@@ -64,10 +70,11 @@ public class TargetApplicationManager(
             targetApplicationData.UserId = UserId;
             await _repository.UpdateAsync(targetApplicationData);
 
-            RecurringJob.AddOrUpdate(
+            _recurringJobManager.AddOrUpdate(
                 $"check-app-{targetApplicationData.Id}",
                 () => CheckTargetsAsync(targetApplicationData.Id),
                 Cron.MinuteInterval(targetApplicationViewModel.CheckIntervalInMinutes));
+
             _logger.LogInformation("Görev güncellendi: {@TargetApplicationData}", targetApplicationData);
         }
         catch (Exception ex)
@@ -81,7 +88,9 @@ public class TargetApplicationManager(
     {
         try
         {
-            RecurringJob.RemoveIfExists($"check-app-{id}");
+            _recurringJobManager.RemoveIfExists($"check-app-{id}");
+
+            //RecurringJob.RemoveIfExists($"check-app-{id}");
             await _repository.DeleteAsync(id);
             _logger.LogInformation("Görev silindi. ID: {Id}", id);
         }

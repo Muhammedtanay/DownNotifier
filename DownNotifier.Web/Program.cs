@@ -41,10 +41,11 @@ builder.Services.AddDbContext<DownNotifierDbContext>(options =>
 
     options.UseSqlServer(connectionString);
 });
+
 builder.Services.AddHangfire(config =>
     config.UseSqlServerStorage(connectionString));
-
 builder.Services.AddHangfireServer();
+
 builder.Services.AddIdentity<AppUser, AppRole>()
     .AddEntityFrameworkStores<DownNotifierDbContext>()
     .AddDefaultTokenProviders();

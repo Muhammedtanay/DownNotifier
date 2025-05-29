@@ -2,8 +2,7 @@
 
 <div class="container mt-5">
     <h2 class="mb-4">Uygulama Düzenle</h2>
-
-    <form asp-action="Edit" method="post">
+    <form id="editForm" asp-action="Edit" method="post" asp-antiforgery="true">
         <input type="hidden" asp-for="Id" />
 
         <div class="mb-3">
@@ -28,3 +27,32 @@
         <a asp-action="Index" class="btn btn-secondary ms-2">İptal</a>
     </form>
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#editForm').submit(function (e) {
+                e.preventDefault();
+
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function () {
+                        alert('Güncelleme başarılı! Yönlendiriliyorsunuz...');
+                        setTimeout(function () {
+                            window.location.href = '/TargetApplication/Index'; // Controller adın farklıysa değiştir
+                        }, 1500);
+                    },
+                    error: function () {
+                        alert('Güncelleme sırasında bir hata oluştu.');
+                    }
+                });
+            });
+        });
+    </script>
+}

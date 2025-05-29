@@ -14,7 +14,7 @@
 
 <div class="container mt-5">
     <h2 class="mb-4">Yeni Uygulama Ekle</h2>
-    <form asp-action="Create" method="post" class="needs-validation" novalidate>
+    <form asp-action="Create" id="targetForm" method="post" class="needs-validation" novalidate>
         <div class="mb-3">
             <label asp-for="Name" class="form-label">Ad</label>
             <input asp-for="Name" class="form-control" placeholder="Uygulama adı" required />
@@ -33,20 +33,49 @@
         <button type="submit" class="btn btn-success">Kaydet</button>
     </form>
 </div>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#targetForm').submit(function (e) {
+                e.preventDefault();
 
-<script>
-    (function () {
-        'use strict';
-        var forms = document.querySelectorAll('.needs-validation');
-        Array.prototype.slice.call(forms)
-            .forEach(function (form) {
-                form.addEventListener('submit', function (event) {
-                    if (!form.checkValidity()) {
-                        event.preventDefault();
-                        event.stopPropagation();
+                $.ajax({
+                    url: $(this).attr('action'),
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    headers: {
+                        'RequestVerificationToken': $('input[name="__RequestVerificationToken"]').val()
+                    },
+                    success: function () {
+                        alert('Kayıt başarılı! Yönlendiriliyorsunuz...');
+                        setTimeout(function () {
+                            window.location.href = '/TargetApplication/Index';
+                        }, 1500);
+                    },
+                    error: function () {
+                        alert('Kayıt sırasında bir hata oluştu.');
                     }
-                    form.classList.add('was-validated');
-                }, false);
+                });
             });
-    })();
-</script>
+        });
+    </script>
+    <script>
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+        })();
+
+
+    </script>
+}
